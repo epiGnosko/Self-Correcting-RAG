@@ -1,0 +1,71 @@
+                                    ┌─────────────────────────────────────────────┐
+                                    │                  User Query X               │
+                                    └─────────────────────────────────────────────┘
+                                                      │
+                                                      ▼
+                                            ┌─────────────────┐
+                                            │    Retriever    │
+                                            └─────────────────┘
+                                                      │
+                                                      ▼
+                                         Retrieved Documents (d1,d2,...dn)
+                                                      │
+                                                      ▼
+                              ┌─────────────────────────────────────────────┐
+                              │         Retrieval Evaluator (CRAG)          │
+                              │ "Are retrieved documents reliable enough?"  │
+                              └─────────────────────────────────────────────┘
+                                       │            │             │
+                              Correct  │        Ambiguous      Incorrect
+                                       │            │             │
+                                       ▼            ▼             ▼
+                           ┌──────────────┐  ┌─────────────┐ ┌──────────────┐
+                           │Knowledge     │  │Knowledge    │ │Rewrite Query │
+                           │Refinement    │  │Refinement + │ │+ Web Search  │
+                           │(Strip/Filter)│  │Extra Search │ │Retrieve Again│
+                           └──────────────┘  └─────────────┘ └──────────────┘
+                                       │            │             │
+                                       └──────┬─────┴──────┬──────┘
+                                              ▼
+                                 Refined Knowledge Context (K)
+                                              │
+                                              ▼
+                               ┌──────────────────────────────┐
+                               │      LLM Generator           │
+                               └──────────────────────────────┘
+                                              │
+                                              ▼
+                                   Initial Answer (A₀)
+                                              │
+                                              ▼
+                   ┌──────────────────────────────────────────────────────────┐
+                   │        Self Evaluation / Reflection Module               │
+                   │                                                          │
+                   │ • Is the answer grounded in retrieved evidence?          │
+                   │ • Is every part of the question answered?                │
+                   │ • Any hallucinations?                                    │
+                   │ • Confidence score?                                      │
+                   └──────────────────────────────────────────────────────────┘
+                               │                     │
+                         Good Answer          Needs Correction
+                               │                     │
+                               ▼                     ▼
+                     ┌──────────────┐      ┌──────────────────────┐
+                     │ Final Answer │      │ Decide Correction    │
+                     └──────────────┘      └──────────────────────┘
+                                                    │
+                               ┌────────────────────┴──────────────────┐
+                               │                                       │
+                               ▼                                       ▼
+                  Retrieve More Documents                  Regenerate Answer
+                        (if knowledge gap)                  using same context
+                               │                                       │
+                               └───────────────┬───────────────────────┘
+                                               ▼
+                                      Updated Context (K')
+                                               │
+                                               ▼
+                                          LLM Generator
+                                               │
+                                               ▼
+                                     Final Verified Answer
