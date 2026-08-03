@@ -222,6 +222,6 @@ __marimo__/
 *.fdb_latexmk
 *.fls 
 *.out 
-*.sinctex.gz 
+*.synctex.gz 
 *.toc 
 *.xdv
