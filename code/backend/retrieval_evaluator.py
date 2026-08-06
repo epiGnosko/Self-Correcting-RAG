@@ -2,7 +2,6 @@ from typing import Literal
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
-from refine import knowledge_refinement
 from llm import llm
 from state import RAGstate
 from retrieve import retrieve
@@ -114,60 +113,3 @@ if __name__ == "__main__":
     print(f"Verdict   : {state['retrieval_verdict']}")
     print(f"Reasoning : {state['retrieval_reasoning']}")
 
-if __name__ == "__main__":
-
-    from retrieve import retrieve
-    from retrieval_evaluator import (
-        retrieval_evaluator,
-        retrieval_route,
-    )
-
-    # ---------------------------
-    # User Question
-    # ---------------------------
-    question = input("Enter your question: ")
-
-    state = {
-        "question": question,
-        "documents": [],
-        "refined_documents": [],
-    }
-
-    print("\n==============================")
-    print("Running Retrieval...")
-    print("==============================")
-
-    state = retrieve(state)
-
-    print(f"\nRetrieved {len(state['documents'])} documents.\n")
-
-    print("==============================")
-    print("Running Retrieval Evaluator...")
-    print("==============================")
-
-    state = retrieval_evaluator(state)
-
-    decision = retrieval_route(state)
-
-    print(f"\nDecision: {decision}")
-
-    if decision != "refine":
-        print("\nRetrieval evaluator rejected the documents.")
-        exit()
-
-    print("\n==============================")
-    print("Running Knowledge Refinement...")
-    print("==============================")
-
-    state = knowledge_refinement(state)
-
-    print(
-        f"\nRefined to {len(state['refined_documents'])} document(s).\n"
-    )
-
-    for i, doc in enumerate(state["refined_documents"], start=1):
-        print("=" * 80)
-        print(f"DOCUMENT {i}")
-        print("=" * 80)
-        print(doc.page_content)
-        print()

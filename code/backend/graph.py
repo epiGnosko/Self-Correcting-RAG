@@ -34,9 +34,9 @@ builder.add_conditional_edges(
     "retrieval_evaluator",
     retrieval_route,
     {
-        "refine": "refine",
-        "extra": "extra",
-        "rewrite": "rewrite",
+        "correct": "refine",
+        "ambiguous": "extra",
+        "incorrect": "rewrite",
     }
 )
 

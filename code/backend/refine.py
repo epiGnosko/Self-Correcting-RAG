@@ -45,7 +45,7 @@ Document:
 chain = prompt | llm
 
 
-def knowledge_refinement(state: RAGstate) -> RAGstate:
+def refine_knowledge(state: RAGstate) -> RAGstate:
     """
     Filters each retrieved document independently using the LLM.
     One LLM call is made per document.
@@ -78,6 +78,116 @@ def knowledge_refinement(state: RAGstate) -> RAGstate:
         )
 
     state["refined_documents"] = refined_docs
+
+    return state
+
+
+from search_tool import SearchTool,web_search
+
+# ----------------------------
+# Prompt to detect missing info
+# ----------------------------
+
+missing_prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """
+You are an expert retrieval evaluator.
+
+You are given:
+1. The user's question.
+2. The refined retrieved documents.
+
+Determine whether the refined documents completely answer the user's question.
+
+Rules:
+- If they completely answer the question, return exactly:
+
+NONE
+
+- Otherwise, return ONLY a concise search query that would retrieve the missing information.
+- Do not explain your reasoning.
+- Do not answer the question.
+- Return only the search query.
+""",
+        ),
+        (
+            "human",
+            """
+Question:
+{question}
+
+Refined Documents:
+{documents}
+""",
+        ),
+    ]
+)
+
+missing_chain = missing_prompt | llm
+
+
+def refine_and_search(state: RAGstate) -> RAGstate:
+    """
+    Refine retrieved documents and supplement them
+    with web search results when information is missing.
+    """
+
+    # -----------------------------------
+    # Step 1: Refine retrieved documents
+    # -----------------------------------
+
+    state = refine_knowledge(state)
+
+    question = state["question"]
+    refined_docs = state["refined_documents"]
+
+    # -----------------------------------
+    # Step 2: Combine refined documents
+    # -----------------------------------
+
+    combined_docs = "\n\n".join(
+        doc.page_content for doc in refined_docs
+    )
+
+    # -----------------------------------
+    # Step 3: Detect missing information
+    # -----------------------------------
+
+    response = missing_chain.invoke(
+        {
+            "question": question,
+            "documents": combined_docs,
+        }
+    )
+
+    search_query = response.content.strip()
+
+    print(f"Missing info query: {search_query}")
+
+    # -----------------------------------
+    # Step 4: Search the web (if needed)
+    # -----------------------------------
+
+    web_docs = []
+
+    if search_query.upper() != "NONE":
+
+        print("Searching the web...")
+
+        web_docs = web_search.invoke(
+            {"query": search_query}
+        )
+
+    # -----------------------------------
+    # Step 5: Merge documents
+    # -----------------------------------
+
+    all_docs = refined_docs + web_docs
+
+    state["web_documents"] = web_docs
+    state["documents"] = all_docs
 
     return state
 
@@ -126,7 +236,7 @@ if __name__ == "__main__":
     print("Running Knowledge Refinement...")
     print("==============================")
 
-    state = knowledge_refinement(state)
+    state = refine_knowledge(state)
 
     print(
         f"\nRefined to {len(state['refined_documents'])} document(s).\n"
