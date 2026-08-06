@@ -1,4 +1,4 @@
-import os
+from llm import embeddings, llm
 from dotenv import load_dotenv
 
 from langchain_community.document_loaders import PyPDFDirectoryLoader
@@ -6,14 +6,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_nvidia_ai_endpoints import NVIDIAEmbeddings
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import PyPDFLoader
-
-# ---------------------------------------------------
-# Load environment variables
-# ---------------------------------------------------
-
-load_dotenv()
-
-NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY")
 
 # ---------------------------------------------------
 # Load all PDFs
@@ -37,14 +29,6 @@ chunks = text_splitter.split_documents(documents)
 
 print(f"Created {len(chunks)} chunks.")
 
-# ---------------------------------------------------
-# Embedding Model
-# ---------------------------------------------------
-
-embeddings = NVIDIAEmbeddings(
-    model="nvidia/nv-embedqa-e5-v5",
-    api_key=NVIDIA_API_KEY
-)
 
 # ---------------------------------------------------
 # Create Chroma Vector Store

@@ -1,13 +1,7 @@
 from langchain_chroma import Chroma
 from langchain_nvidia_ai_endpoints import NVIDIAEmbeddings
-import os
+from llm import embeddings
 from state import RAGstate
-from dotenv import load_dotenv
-load_dotenv()
-embeddings = NVIDIAEmbeddings(
-    model="nvidia/nv-embedqa-e5-v5",
-    api_key=os.getenv("NVIDIA_API_KEY")
-)
 
 vectorstore = Chroma(
     persist_directory="./chroma_db",

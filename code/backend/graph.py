@@ -8,9 +8,13 @@ from .state import RAGstate
 loader = PyPDFLoader("data/policy.pdf")
 docs = loader.load()
 
-
+from user_query import user_query
+from retrieve import retrieve
+from retrieval_evaluator import retrieval_evaluator, retrieval_route
+from refine import refine_knowledge, refine_and_search, rewrite_query
 
 builder = StateGraph(RAGstate)
+builder.add_node("user_query",user_query)
 builder.add_node("retrieve", retrieve)
 builder.add_node("retrieval_evaluator", retrieval_evaluator)
 builder.add_node("refine", refine_knowledge)
