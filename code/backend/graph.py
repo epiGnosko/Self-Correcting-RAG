@@ -12,6 +12,8 @@ from user_query import user_query
 from retrieve import retrieve
 from retrieval_evaluator import retrieval_evaluator, retrieval_route
 from refine import refine_knowledge, refine_and_search, rewrite_query
+from generate import generate_answer
+from reflect import self_reflection, reflection_route
 
 builder = StateGraph(RAGstate)
 builder.add_node("user_query",user_query)
@@ -63,6 +65,6 @@ builder.add_conditional_edges(
 # Retry loops
 
 builder.add_edge("retrieve_more", "generate")
-builder.add_edge("regenerate", "reflect")
+builder.add_edge("regenerate", "generate")
 
 graph = builder.compile()

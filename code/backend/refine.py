@@ -191,6 +191,83 @@ def refine_and_search(state: RAGstate) -> RAGstate:
 
     return state
 
+
+rewrite_prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """
+You are a search query rewriting assistant.
+
+Convert the user's question into the best possible
+web search query.
+
+Rules:
+- Preserve the original intent.
+- Expand abbreviations if useful.
+- Include important keywords.
+- Return ONLY the rewritten query.
+- No explanations.
+""",
+        ),
+        (
+            "human",
+            """
+Question:
+{question}
+""",
+        ),
+    ]
+)
+
+rewrite_chain = rewrite_prompt | llm
+
+def rewrite_query(state: RAGstate) -> RAGstate:
+    """
+    Used when retrieval evaluator marks retrieval as incorrect.
+
+    Rewrites the user's question into a better search query,
+    performs web search, and replaces documents with
+    web-retrieved documents.
+    """
+
+    question = state["question"]
+
+    # -----------------------
+    # Rewrite query
+    # -----------------------
+
+    response = rewrite_chain.invoke(
+        {
+            "question": question,
+        }
+    )
+
+    rewritten_query = response.content.strip()
+
+    print(f"Rewritten Query: {rewritten_query}")
+
+    # -----------------------
+    # Web search
+    # -----------------------
+
+    print("Searching web...")
+
+    web_docs = web_search.invoke(
+        {
+            "query": rewritten_query,
+        }
+    )
+
+    # -----------------------
+    # Update state
+    # -----------------------
+
+    state["documents"] = web_docs + state["documents"]
+    state["web_documents"] = web_docs
+
+    return state
+
 if __name__ == "__main__":
 
     from retrieve import retrieve
@@ -208,6 +285,7 @@ if __name__ == "__main__":
         "question": question,
         "documents": [],
         "refined_documents": [],
+        "web_documents": [],
     }
 
     print("\n==============================")
@@ -216,7 +294,9 @@ if __name__ == "__main__":
 
     state = retrieve(state)
 
-    print(f"\nRetrieved {len(state['documents'])} documents.\n")
+    print(
+        f"\nRetrieved {len(state['documents'])} documents.\n"
+    )
 
     print("==============================")
     print("Running Retrieval Evaluator...")
@@ -224,25 +304,61 @@ if __name__ == "__main__":
 
     state = retrieval_evaluator(state)
 
-    decision = retrieval_route(state)
+    # --------------------------------
+    # FORCE INCORRECT FOR TESTING
+    # --------------------------------
+    decision = "incorrect"
+
+    # Production:
+    # decision = retrieval_route(state)
 
     print(f"\nDecision: {decision}")
 
-    if decision != "correct":
-        print("\nRetrieval evaluator rejected the documents.")
-        exit()
+    if decision == "correct":
+
+        print("\n==============================")
+        print("Running Knowledge Refinement...")
+        print("==============================")
+
+        state = refine_knowledge(state)
+
+        final_docs = state["refined_documents"]
+
+    elif decision == "ambiguous":
+
+        print("\n==============================")
+        print("Running Refinement + Web Search...")
+        print("==============================")
+
+        state = refine_and_search(state)
+
+        final_docs = state["documents"]
+
+    elif decision == "incorrect":
+
+        print("\n==============================")
+        print("Running Query Rewrite + Web Search...")
+        print("==============================")
+
+        state = rewrite_query(state)
+
+        final_docs = state["documents"]
+
+        print(
+            f"\nWeb Documents Retrieved: "
+            f"{len(final_docs)}"
+        )
+
+    else:
+        raise ValueError(
+            f"Unknown decision: {decision}"
+        )
 
     print("\n==============================")
-    print("Running Knowledge Refinement...")
+    print("FINAL DOCUMENTS")
     print("==============================")
 
-    state = refine_knowledge(state)
-
-    print(
-        f"\nRefined to {len(state['refined_documents'])} document(s).\n"
-    )
-
-    for i, doc in enumerate(state["refined_documents"], start=1):
+    for i, doc in enumerate(final_docs, start=1):
         print("=" * 80)
         print(f"DOCUMENT {i}")
         print("=" * 80)
