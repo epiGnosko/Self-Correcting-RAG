@@ -1,9 +1,1 @@
-again for knowledge strips filtering, and the top-k
-is set to 5, filter threshold as -0.5.
-External Knowledge: Google Search API was
-adopted to search for the relevant URLs, top-k
-is set to 5, and pages from Wikipedia will be
-added preferentially. The searched web pages
-are generally in the form of HTML files, where
-content is split with special tokens like <p>
-nts, we\n]\nage model to\nhn-\nÿÿÿÿÿ
+invalid type: string "action only for all instances.\nB.5 Results on PubHealth and Arc-Challenge\nIt is worth mentioning that the performance on\nPubHealth based on LLaMA2-hf-7b was much\nworse than others. We studied these cases and\nfound that LLaMA2-hf-7b is relatively weak in\ninstruction comprehension. Most of the cases\nfail to generate True or False in such a binary-\nhether to retrieve and

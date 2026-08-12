@@ -3,9 +3,9 @@ from langgraph.graph import StateGraph,START , END
 
 from langchain_community.document_loaders import PyPDFLoader
 
-from .state import RAGstate
+from state import RAGstate
 
-loader = PyPDFLoader("data/policy.pdf")
+loader = PyPDFLoader("2401.15884v3.pdf")
 docs = loader.load()
 
 from user_query import user_query
@@ -14,6 +14,8 @@ from retrieval_evaluator import retrieval_evaluator, retrieval_route
 from refine import refine_knowledge, refine_and_search, rewrite_query
 from generate import generate_answer
 from reflect import self_reflection, reflection_route
+from retrieve_more import retrieve_more
+from regenerate import regenerate_answer
 
 builder = StateGraph(RAGstate)
 builder.add_node("user_query",user_query)
@@ -28,7 +30,8 @@ builder.add_node("retrieve_more", retrieve_more)
 builder.add_node("regenerate", regenerate_answer)
 
 # Entry
-builder.add_edge(START, "retrieve")
+builder.add_edge(START, "user_query")
+builder.add_edge("user_query", "retrieve")
 # Retrieval
 builder.add_edge("retrieve", "retrieval_evaluator")
 
@@ -64,7 +67,11 @@ builder.add_conditional_edges(
 
 # Retry loops
 
-builder.add_edge("retrieve_more", "generate")
-builder.add_edge("regenerate", "generate")
+builder.add_edge("retrieve_more", "regenerate")
+builder.add_edge("regenerate", END)
 
 graph = builder.compile()
+result = graph.invoke(
+    {"question": ""}
+)
+print(result)

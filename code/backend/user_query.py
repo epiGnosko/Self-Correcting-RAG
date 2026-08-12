@@ -1,4 +1,4 @@
-from .state import RAGstate
+from state import RAGstate
 def user_query(state: RAGstate) -> RAGstate:
     """
     Process the user's query and update the state accordingly.

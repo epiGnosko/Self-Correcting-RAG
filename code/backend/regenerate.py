@@ -1,7 +1,7 @@
 from langchain_core.messages import HumanMessage
 from state import RAGstate
 from llm import llm
-def regenerate(state: RAGstate) -> RAGstate:
+def regenerate_answer(state: RAGstate) -> RAGstate:
     """
     Regenerate answer when reflection says the answer
     is poorly formed but additional retrieval is not needed.
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     }
 
     try:
-        updated_state = regenerate(test_state)
+        updated_state = regenerate_answer(test_state)
 
         print("\n" + "=" * 80)
         print("REGENERATED ANSWER")
