@@ -14,3 +14,4 @@ class RAGstate(TypedDict):
     retrieval_reasoning: str
     answer: str
     reflection: ReflectionResult
+    final_answer: str
