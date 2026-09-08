@@ -1,0 +1,273 @@
+.document-panel {
+  width: 20%;
+  height: 100%;
+  border-left: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.01);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  transition: width var(--transition-smooth), transform var(--transition-smooth);
+  overflow: hidden;
+  z-index: 4;
+}
+
+.panel-header {
+  height: 70px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--glass-border);
+  justify-content: space-between;
+}
+
+.panel-header h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-header h3 svg {
+  color: var(--accent-color);
+  width: 18px;
+  height: 18px;
+}
+
+.panel-header-count {
+  font-size: 0.75rem;
+  background: rgba(var(--accent-rgb), 0.15);
+  color: var(--accent-color);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  border: 1px solid var(--glass-border-accent);
+}
+
+.dropzone-container {
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+/* File Input element hidden */
+.file-input-hidden {
+  display: none;
+}
+
+.dropzone {
+  border: 2px dashed var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 24px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.01);
+  transition: all var(--transition-fast);
+  min-height: 140px;
+}
+
+.dropzone:hover {
+  border-color: var(--accent-color);
+  background: rgba(var(--accent-rgb), 0.04);
+  box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.1);
+}
+
+.dropzone.drag-active {
+  border-color: var(--accent-color);
+  background: rgba(var(--accent-rgb), 0.08);
+  box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.2);
+  transform: scale(0.98);
+}
+
+.dropzone svg {
+  width: 36px;
+  height: 36px;
+  color: var(--text-subtle);
+  transition: color var(--transition-fast), transform var(--transition-smooth);
+}
+
+.dropzone:hover svg,
+.dropzone.drag-active svg {
+  color: var(--accent-color);
+  transform: translateY(-4px) scale(1.05);
+}
+
+.dropzone-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.dropzone-subtext {
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+}
+
+.document-list-wrapper {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.document-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Document Card Styling */
+.document-card {
+  position: relative;
+  height: 96px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.document-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-color);
+  z-index: 3;
+  transition: transform var(--transition-fast);
+  transform: scaleY(0.7);
+  transform-origin: center;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.document-card:hover::before {
+  transform: scaleY(1);
+}
+
+.document-card:hover {
+  border-color: var(--glass-border-accent);
+  box-shadow: var(--shadow-sm), 0 0 16px rgba(var(--accent-rgb), 0.15);
+  transform: translateY(-2px);
+}
+
+.document-thumbnail-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.12;
+  filter: blur(1px);
+  z-index: 1;
+  transition: opacity var(--transition-fast), transform var(--transition-smooth);
+}
+
+.document-card:hover .document-thumbnail-bg {
+  opacity: 0.22;
+  transform: scale(1.08);
+}
+
+.document-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.15) 100%);
+  z-index: 2;
+  transition: background 0.3s ease;
+}
+
+[data-theme="light"] .document-card-overlay {
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.2) 100%);
+}
+
+.document-card-content {
+  position: relative;
+  z-index: 3;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.document-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+  max-width: 80%;
+  text-align: left;
+}
+
+.document-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.document-meta {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.document-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-subtle);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  z-index: 4;
+}
+
+.document-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  transform: scale(1.15);
+}
+
+.document-delete-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.empty-docs {
+  text-align: center;
+  color: var(--text-subtle);
+  font-size: 0.82rem;
+  padding: 32px 16px;
+  border: 1px dashed var(--glass-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.005);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .document-panel {
+    display: none;
+  }
+}

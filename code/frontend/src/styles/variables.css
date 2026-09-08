@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-primary: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  
+  /* Shared transitions & animations */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-slow: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+}
+
+/* Dark Theme (Default) */
+[data-theme="dark"] {
+  --bg-gradient: radial-gradient(circle at 50% 50%, #1a080c 0%, #08080c 100%);
+  --bg-blob-1: rgba(220, 20, 60, 0.12); /* Crimson */
+  --bg-blob-2: rgba(76, 29, 149, 0.15); /* Purple */
+  --bg-blob-3: rgba(239, 68, 68, 0.08); /* Coral Red */
+  
+  --accent-color: #ff2e51;
+  --accent-rgb: 255, 46, 81;
+  --accent-gradient: linear-gradient(135deg, #ff2e51 0%, #b30022 100%);
+  --accent-focus-ring: rgba(255, 46, 81, 0.35);
+  
+  --glass-bg: rgba(20, 16, 18, 0.45);
+  --glass-bg-hover: rgba(30, 24, 27, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-border-accent: rgba(255, 46, 81, 0.3);
+  --glass-blur: blur(16px);
+  
+  --text-main: #f8fafc;
+  --text-muted: rgba(248, 250, 252, 0.65);
+  --text-subtle: rgba(248, 250, 252, 0.4);
+  
+  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  --scrollbar-thumb-hover: rgba(255, 46, 81, 0.4);
+  
+  --msg-user-bg: rgba(220, 20, 60, 0.25);
+  --msg-user-border: rgba(255, 46, 81, 0.4);
+  --msg-bot-bg: rgba(30, 30, 40, 0.4);
+  --msg-bot-border: rgba(255, 255, 255, 0.06);
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-gradient: radial-gradient(circle at 50% 50%, #f0f7ff 0%, #fcfbfb 100%);
+  --bg-blob-1: rgba(14, 165, 233, 0.12); /* Sky Blue */
+  --bg-blob-2: rgba(99, 102, 241, 0.12); /* Indigo */
+  --bg-blob-3: rgba(56, 189, 248, 0.08); /* Ice Blue */
+  
+  --accent-color: #0077ff;
+  --accent-rgb: 0, 119, 255;
+  --accent-gradient: linear-gradient(135deg, #0099ff 0%, #0055dd 100%);
+  --accent-focus-ring: rgba(0, 119, 255, 0.3);
+  
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-bg-hover: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-border-accent: rgba(0, 119, 255, 0.3);
+  --glass-blur: blur(16px);
+  
+  --text-main: #0f172a;
+  --text-muted: rgba(15, 23, 42, 0.7);
+  --text-subtle: rgba(15, 23, 42, 0.45);
+  
+  --scrollbar-thumb: rgba(0, 0, 0, 0.1);
+  --scrollbar-thumb-hover: rgba(0, 119, 255, 0.4);
+  
+  --msg-user-bg: rgba(0, 119, 255, 0.15);
+  --msg-user-border: rgba(0, 119, 255, 0.3);
+  --msg-bot-bg: rgba(255, 255, 255, 0.3);
+  --msg-bot-border: rgba(0, 0, 0, 0.05);
+}
