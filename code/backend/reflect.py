@@ -31,6 +31,16 @@ Verdict rules:
 
 - retrieve_more
   Context lacks information needed to answer confidently.
+
+Return the output in JSON
+
+## Sample output 
+
+{
+    score: $score,
+    verdict: $verdict_text,
+    reasoning: $short_reasoning
+}
 """,
         ),
         (

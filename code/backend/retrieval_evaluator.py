@@ -36,7 +36,15 @@ Classification:
 - 50-79 → ambiguous
 - 0-49 → incorrect
 
-Return the score, verdict, and a short reasoning.
+Return the score, verdict, and a short reasoning in JSON.
+
+## Sample output 
+
+{
+    score: $score,
+    verdict: $verdict_text,
+    reasoning: $short_reasoning
+}
 """,
         ),
         (
