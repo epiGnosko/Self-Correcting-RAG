@@ -1,0 +1,18 @@
+{
+  "default-self-rag-paper": {
+    "id": "default-self-rag-paper",
+    "name": "2401.15884v3.pdf (Self-RAG Paper)",
+    "size": 667756,
+    "type": "application/pdf",
+    "chunks": 86,
+    "file_path": "2401.15884v3.pdf"
+  },
+  "default-crag-paper": {
+    "id": "default-crag-paper",
+    "name": "2401.15884v3.pdf (CRAG Paper)",
+    "size": 667756,
+    "type": "application/pdf",
+    "chunks": 86,
+    "file_path": "2401.15884v3.pdf"
+  }
+}
